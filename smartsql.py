@@ -77,10 +77,10 @@ class TableSet(object):
         self._on = None
 
     def __mul__(self, obj):
-        return self._add_join("JOIN", obj)
+        return copy.deepcopy(self)._add_join("JOIN", obj)
 
     def __add__(self, obj):
-        return self._add_join("LEFT JOIN", obj)
+        return copy.deepcopy(self)._add_join("LEFT JOIN", obj)
 
     @property
     def sql(self):
