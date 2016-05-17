@@ -564,6 +564,28 @@ class QuerySet(object):
 
         return self._db.select(sql, params)[0][0]
 
+    @opt_checker(["escape_null"])
+    def sum(self, *f_list, **opt):
+        sql = ["SELECT"]
+        params = []
+
+        if len(f_list) == 0:
+            raise LookupError("No any sum field found")
+
+        if opt.get("escape_null") is True:
+            sql.append("COALESCE(SUM(%s),0)" % (_gen_f_list(f_list),))
+        else:
+            sql.append("SUM(%s)" % (_gen_f_list(f_list),))
+
+        self._join_sql_part(sql, params, ["from", "where"])
+
+        sql = " ".join(sql)
+        if self._db is None:
+            return sql, params
+
+        result = self._db.select(sql, params)
+        return None if len(result) < 1 else result[0][0]
+
     @opt_checker(["distinct", "for_update", "dict_cursor", "dry"])
     def select(self, *f_list, **opt):
         sql = ["SELECT"]
