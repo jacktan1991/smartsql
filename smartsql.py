@@ -465,7 +465,7 @@ class QuerySet(object):
             self.tables = db_or_t
         elif db_or_t is None:
             self._db = None
-        else
+        else:
             self._db = QuerySetDeepcopyHelper(db_or_t)
 
         # simple var
