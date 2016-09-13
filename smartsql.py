@@ -454,7 +454,7 @@ class QuerySetDeepcopyHelper(object):
 
 
 class QuerySet(object):
-    def __init__(self, db_or_t):
+    def __init__(self, db_or_t=None):
         # complex var
         self._db = None
         self.tables = None
@@ -463,7 +463,9 @@ class QuerySet(object):
 
         if isinstance(db_or_t, Table) or isinstance(db_or_t, TableSet):
             self.tables = db_or_t
-        else:
+        elif db_or_t is None:
+            self._db = None
+        else
             self._db = QuerySetDeepcopyHelper(db_or_t)
 
         # simple var
